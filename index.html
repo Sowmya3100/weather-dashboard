@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WeatherNow Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+  <!-- Animated sky background -->
+  <div class="sky-bg">
+    <div class="star" style="top:10%;left:15%;animation-delay:0s"></div>
+    <div class="star" style="top:20%;left:70%;animation-delay:1s"></div>
+    <div class="star" style="top:5%;left:50%;animation-delay:2s"></div>
+    <div class="star" style="top:30%;left:85%;animation-delay:0.5s"></div>
+    <div class="star" style="top:15%;left:35%;animation-delay:1.5s"></div>
+  </div>
+
+  <div class="container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <i class="fas fa-cloud-sun"></i>
+        <span>WeatherNow</span>
+      </div>
+      <div class="header-right">
+        <span id="current-datetime" class="datetime"></span>
+        <span class="unit-toggle">
+          <button id="btn-c" class="unit-btn active" onclick="setUnit('metric')">°C</button>
+          <span>/</span>
+          <button id="btn-f" class="unit-btn" onclick="setUnit('imperial')">°F</button>
+        </span>
+      </div>
+    </header>
+
+    <!-- Search Section -->
+    <section class="search-section">
+      <h1 class="hero-title">What's the weather like?</h1>
+      <p class="hero-sub">Search any city in the world</p>
+      <div class="search-box">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="city-input" placeholder="Enter city name... e.g. Bangalore" autocomplete="off"/>
+        <button id="search-btn" onclick="fetchWeather()">
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+      <div id="suggestions" class="suggestions hidden"></div>
+      <div id="error-msg" class="error-msg hidden">
+        <i class="fas fa-triangle-exclamation"></i>
+        <span id="error-text">City not found. Please try again.</span>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Weather Card -->
+      <section id="weather-card" class="weather-card hidden">
+        <div class="card-header">
+          <div class="location-info">
+            <h2 id="city-name" class="city-name"></h2>
+            <p id="country-name" class="country-name"></p>
+          </div>
+          <div class="weather-condition">
+            <img id="weather-icon" src="" alt="weather icon" class="weather-icon"/>
+            <p id="condition-text" class="condition-text"></p>
+          </div>
+        </div>
+
+        <div class="temp-display">
+          <span id="temperature" class="temperature"></span>
+          <span id="temp-unit" class="temp-unit">°C</span>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-temperature-half"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Feels Like</span>
+              <span id="feels-like" class="stat-value"></span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-droplet"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Humidity</span>
+              <span id="humidity" class="stat-value"></span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-wind"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Wind Speed</span>
+              <span id="wind-speed" class="stat-value"></span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-eye"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Visibility</span>
+              <span id="visibility" class="stat-value"></span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-gauge-high"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Pressure</span>
+              <span id="pressure" class="stat-value"></span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-sun"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">UV / Cloud</span>
+              <span id="cloud-cover" class="stat-value"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sunrise-sunset">
+          <div class="sun-info">
+            <i class="fas fa-sunrise"></i>
+            <div>
+              <span class="stat-label">Sunrise</span>
+              <span id="sunrise" class="stat-value"></span>
+            </div>
+          </div>
+          <div class="sun-divider"></div>
+          <div class="sun-info">
+            <i class="fas fa-sunset"></i>
+            <div>
+              <span class="stat-label">Sunset</span>
+              <span id="sunset" class="stat-value"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Search History -->
+      <aside class="history-panel">
+        <div class="history-header">
+          <h3><i class="fas fa-clock-rotate-left"></i> Recent Searches</h3>
+          <button class="clear-btn" onclick="clearHistory()">Clear All</button>
+        </div>
+        <div id="history-list" class="history-list">
+          <div class="empty-history">
+            <i class="fas fa-magnifying-glass"></i>
+            <p>No recent searches yet</p>
+          </div>
+        </div>
+      </aside>
+
+    </main>
+
+    <!-- Loading Spinner -->
+    <div id="loader" class="loader hidden">
+      <div class="spinner"></div>
+      <p>Fetching weather data...</p>
+    </div>
+
+    <footer class="footer">
+      Powered by <a href="https://openweathermap.org" target="_blank">OpenWeatherMap API</a> &nbsp;|&nbsp; Built by Sowmya M
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
