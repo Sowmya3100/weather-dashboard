@@ -20,6 +20,7 @@ const API_KEY = "YOUR_API_KEY_HERE";
 with your actual key:
 ```js
 const API_KEY = "abc123yourrealkeyhere";
+Add your OpenWeatherMap API key in script.js before running the app.
 ```
 
 ### 3. Run the App
