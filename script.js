@@ -1,5 +1,5 @@
 // ====== CONFIG ======
-const API_KEY = "YOUR_API_KEY_HERE"; // Replace with your OpenWeatherMap API key
+const API_KEY = '46ae00f0684b3290c6d72011d7019963'; // Replace with your OpenWeatherMap API key
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
 const GEO_URL = "https://api.openweathermap.org/geo/1.0";
 
